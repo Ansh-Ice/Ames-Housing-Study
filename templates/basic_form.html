@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Basic House Price Predictor</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        input[type="number"],
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            border: 2px solid #ddd;
+            border-radius: 5px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+        
+        input[type="number"]:focus,
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 30px;
+        }
+        
+        button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn-predict {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-predict:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-reset {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-reset:hover {
+            background: #e0e0e0;
+        }
+        
+        .info-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        .info-box strong {
+            color: #333;
+        }
+        
+        .form-footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .form-footer a {
+            color: #667eea;
+            text-decoration: none;
+        }
+        
+        .form-footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏠 House Price Predictor</h1>
+        <p class="subtitle">Basic Model (9 Features)</p>
+        
+        <div class="info-box">
+            <strong>How it works:</strong> Enter the house details below to get an estimated sale price using our basic machine learning model.
+        </div>
+        
+        <form id="predictionForm">
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="OverallQual">Overall Quality (1-10)</label>
+                    <input type="number" id="OverallQual" name="OverallQual" min="1" max="10" placeholder="e.g., 7" required>
+                </div>
+                <div class="form-group">
+                    <label for="GrLivArea">Above Grade Living Area (sqft)</label>
+                    <input type="number" id="GrLivArea" name="GrLivArea" min="0" placeholder="e.g., 2000" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="GarageCars">Garage Cars (0-4)</label>
+                    <input type="number" id="GarageCars" name="GarageCars" min="0" max="4" placeholder="e.g., 2" required>
+                </div>
+                <div class="form-group">
+                    <label for="TotalBsmtSF">Total Basement SF (sqft)</label>
+                    <input type="number" id="TotalBsmtSF" name="TotalBsmtSF" min="0" placeholder="e.g., 1000" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="YearBuilt">Year Built</label>
+                    <input type="number" id="YearBuilt" name="YearBuilt" min="1800" max="2024" placeholder="e.g., 2005" required>
+                </div>
+                <div class="form-group">
+                    <label for="FullBath">Full Bathrooms</label>
+                    <input type="number" id="FullBath" name="FullBath" min="0" placeholder="e.g., 2" required>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div class="form-group">
+                    <label for="TotRmsAbvGrd">Total Rooms Above Grade</label>
+                    <input type="number" id="TotRmsAbvGrd" name="TotRmsAbvGrd" min="1" placeholder="e.g., 8" required>
+                </div>
+                <div class="form-group">
+                    <label for="FirstFlrSF">First Floor SF (sqft)</label>
+                    <input type="number" id="FirstFlrSF" name="FirstFlrSF" min="0" placeholder="e.g., 1500" required>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label for="GarageArea">Garage Area (sqft)</label>
+                <input type="number" id="GarageArea" name="GarageArea" min="0" placeholder="e.g., 500" required>
+            </div>
+            
+            <div class="button-group">
+                <button type="submit" class="btn-predict">Predict Price</button>
+                <button type="reset" class="btn-reset">Clear</button>
+            </div>
+        </form>
+        
+        <div class="form-footer">
+            <a href="/">← Back to Advanced Model</a>
+        </div>
+    </div>
+    
+    <script>
+        document.getElementById('predictionForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = {
+                'OverallQual': parseFloat(document.getElementById('OverallQual').value),
+                'GrLivArea': parseFloat(document.getElementById('GrLivArea').value),
+                'GarageCars': parseFloat(document.getElementById('GarageCars').value),
+                'TotalBsmtSF': parseFloat(document.getElementById('TotalBsmtSF').value),
+                'YearBuilt': parseFloat(document.getElementById('YearBuilt').value),
+                'FullBath': parseFloat(document.getElementById('FullBath').value),
+                'TotRmsAbvGrd': parseFloat(document.getElementById('TotRmsAbvGrd').value),
+                '1stFlrSF': parseFloat(document.getElementById('FirstFlrSF').value),
+                'GarageArea': parseFloat(document.getElementById('GarageArea').value)
+            };
+            
+            try {
+                const response = await fetch('/predict-basic', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.predicted_price) {
+                    // Redirect to results page with the prediction
+                    window.location.href = `/basic-result?price=${result.predicted_price.toFixed(2)}`;
+                } else {
+                    alert('Error: ' + (result.error || 'Unable to make prediction'));
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prediction Result</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            padding: 40px;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+        
+        .result-icon {
+            font-size: 60px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 28px;
+        }
+        
+        .subtitle {
+            color: #999;
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        
+        .result-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 40px;
+            border-radius: 10px;
+            margin-bottom: 30px;
+        }
+        
+        .price-label {
+            font-size: 16px;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .price-value {
+            font-size: 48px;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .info-box {
+            background: #f9f9f9;
+            padding: 20px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            text-align: left;
+            border-left: 4px solid #667eea;
+        }
+        
+        .info-label {
+            color: #666;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        
+        .info-text {
+            color: #333;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+            flex-direction: column;
+        }
+        
+        button {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .btn-again {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+        
+        .btn-again:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .btn-home {
+            background: #f0f0f0;
+            color: #333;
+        }
+        
+        .btn-home:hover {
+            background: #e0e0e0;
+        }
+        
+        .disclaimer {
+            color: #999;
+            font-size: 12px;
+            margin-top: 20px;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="result-icon">🏡</div>
+        <h1>Prediction Complete!</h1>
+        <p class="subtitle">Based on the basic machine learning model</p>
+        
+        <div class="result-box">
+            <div class="price-label">Estimated House Price</div>
+            <div class="price-value">$<span id="predictedPrice">0</span></div>
+        </div>
+        
+        <div class="info-box">
+            <div class="info-label">About This Prediction</div>
+            <div class="info-text">
+                This prediction is generated using a linear regression model trained on 9 important features from the Ames Housing dataset. 
+                The model achieved an R² score of 0.87 on test data, meaning it explains approximately 87% of the variance in house prices.
+            </div>
+        </div>
+        
+        <div class="button-group">
+            <button class="btn-again" onclick="window.location.href='/basic-form'">Make Another Prediction</button>
+            <button class="btn-home" onclick="window.location.href='/'">Back to Advanced Model</button>
+        </div>
+        
+        <div class="disclaimer">
+            <strong>Disclaimer:</strong> This is a prediction based on machine learning and historical data. Actual house prices may vary significantly based on market conditions, location details, and other factors not captured in the model.
+        </div>
+    </div>
+    
+    <script>
+        // Get price from URL parameter
+        const params = new URLSearchParams(window.location.search);
+        const price = params.get('price');
+        
+        if (price) {
+            const formattedPrice = parseFloat(price).toLocaleString('en-US', {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
+            document.getElementById('predictedPrice').textContent = formattedPrice;
+        } else {
+            document.querySelector('.container').innerHTML = '<h1>Error</h1><p>No prediction data found. Please try again.</p><button class="btn-again" onclick="window.location.href=\'/basic-form\'">Go Back</button>';
+        }
+    </script>
+</body>
+</html>
